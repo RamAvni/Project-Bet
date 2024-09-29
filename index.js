@@ -1,5 +1,5 @@
 const player = document.getElementById("player");
-const playerVelocity = 10;
+const playerVelocity = 5;
 let platforms = document.getElementsByClassName("platform");
 const keysPressedNow = {};
 
@@ -76,6 +76,10 @@ function unsetReleasedKeys(e) {
       keysPressedNow["down"] = false;
       break;
   }
+}
+
+
+
 setInterval(function () {
     let j = platforms.length;
     let platY;
@@ -96,7 +100,7 @@ setInterval(function () {
     let height = Number(getComputedStyle(platforms[j]).height.replace(/px/, ""));
     let stop = platY + height;
     if (placeY !== stop) {
-        entityFall(player)
+        entityMove(player, 'down')
     }
     else {
         return;
@@ -104,10 +108,4 @@ setInterval(function () {
     console.log(Number(getComputedStyle(player).bottom.replace(/px/, "")));
     console.log("stop", stop);
 
-}, 5)}
-
-function entityFall(entity) {
-    let currentBottomValue = entity.style.bottom ? Number(entity.style.bottom.replace(/px/, ""))
-        : Number(getComputedStyle(entity).bottom.replace(/px/, ""))
-    entity.style.bottom = `${--currentBottomValue}px`
-}
+}, 50)
