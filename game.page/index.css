@@ -5,6 +5,7 @@
 }
 
 #screen-container {
+  position: relative;
   width: 100vw;
   height: 100vh;
   background-color: lightblue;
@@ -27,7 +28,7 @@
 }
 
 .full-platform {
-  top: 93%;
+  bottom: 20px;
   width: 90%;
 }
 
