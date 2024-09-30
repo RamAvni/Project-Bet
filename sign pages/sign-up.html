@@ -13,20 +13,21 @@
         <h1>sign up</h1>
         <form>
             <label for="user-name">user name:
-                <input type="text" id="user-name" name="user-name" minlength="2" maxlength="20">
+                <input type="text" id="user-name" name="user-name" minlength="2" maxlength="20" required>
             </label><br>
             <label for="password">password:
-                <input type="password" id="password" name="password" minlength="2" maxlength="20">
+                <input type="password" id="password" name="password" minlength="2" maxlength="20" required>
             </label><br>
             <label for="email">email:
-                <input type="email" id="email" name="email">
+                <input type="email" id="email" name="email" required>
             </label><br>
             <label for="phone">phone number:
-                <input type="phone" id="phone" name="phone" minlength="2" maxlength="20">
+                <input type="phone" id="phone" name="phone" minlength="2" maxlength="20" required>
             </label><br>
             <button type="submit" id="register">submit</button>
         </form>
     </div>
+    
     <script src="./sign-up.js"></script>
 </body>
 
