@@ -17,7 +17,7 @@ function entityMove(entity, direction) {
   // Element OR Object --> X
   // Moves an entity by gameVelocity to the specified direction
   let entityEl = getEntityElement(entity);
-  const rect = entity.getBoundingClientRect();
+  const rect = entityEl.getBoundingClientRect();
 
   let currentBottomValue = Number(
     getComputedStyle(entityEl).bottom.replace(/px/, "")
@@ -29,7 +29,7 @@ function entityMove(entity, direction) {
 
   switch (direction) {
     case "up":
-      entityEl.position.x = `${currentBottomValue + gameVelocity}px`;
+      entityEl.style.bottom = `${currentBottomValue + gameVelocity}px`;
       break;
     case "down":
       entityEl.style.bottom = `${currentBottomValue - gameVelocity}px`;
@@ -44,6 +44,7 @@ function entityMove(entity, direction) {
 }
 
 function setKeysPressedNow(e) {
+  console.log("press");
   // set
   switch (e.code) {
     case "ArrowRight":
@@ -53,6 +54,7 @@ function setKeysPressedNow(e) {
       keysPressedNow["left"] = true;
       break;
     case "ArrowUp":
+      console.log("up");
       player.isJumping = true;
       keysPressedNow["up"] = true;
       break;
@@ -96,36 +98,43 @@ function playerGravity(player) {
   const playerStyle = getComputedStyle(player.element);
   const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
   const currentLeftValue = getStrippedNumberFromString(playerStyle.left);
-  player.isOnPlatform = false
-  if (!player.isJumping && !player.isOnPlatform) {
-    let onAnyPlatforms = false;
+  let onAnyPlatforms = false;
 
-    for (let platform of platforms) {
-      
-      const platformStyle = getComputedStyle(platform);
-      const platformBottomValue = getStrippedNumberFromString(platformStyle.bottom);
-      const platformHeightValue = getStrippedNumberFromString(platformStyle.height);
-      const platformLeftValue = getStrippedNumberFromString(platformStyle.left);
-      const platformWidthValue = getStrippedNumberFromString(platformStyle.width);
+  let isOnPlatformTopHeight;
+  let isOnPlatformWidth;
 
-      // Collision
-      if (
-        
-        currentBottomValue === platformBottomValue + platformHeightValue &&
-        platformLeftValue <= currentLeftValue &&
-        currentLeftValue <= platformLeftValue + platformWidthValue
-      ) {
-        player.isOnPlatform = true;
-        onAnyPlatforms = true;
-      } else if (!onAnyPlatforms){
-        entityMove(player, "down");
-        player.isOnPlatform = false;
-        onAnyPlatforms = false;
-      }
-    }
+  for (let platform of platforms) {
+    const platformStyle = getComputedStyle(platform);
+    const platformBottomValue = getStrippedNumberFromString(
+      platformStyle.bottom
+    );
+    const platformHeightValue = getStrippedNumberFromString(
+      platformStyle.height
+    );
+    const platformLeftValue = getStrippedNumberFromString(platformStyle.left);
+    const platformWidthValue = getStrippedNumberFromString(platformStyle.width);
+
+    isOnPlatformTopHeight =
+      currentBottomValue === platformBottomValue + platformHeightValue;
+
+    isOnPlatformWidth =
+      platformLeftValue <= currentLeftValue &&
+      currentLeftValue <= platformLeftValue + platformWidthValue;
+
+      if (isOnPlatformTopHeight && isOnPlatformWidth) break;
   }
 
-  console.log(`player.isJumping = ${player.isJumping}, player.isOnPlatform = ${player.isOnPlatform}`)
+  // Collision
+  if (isOnPlatformTopHeight && isOnPlatformWidth) {
+    player.isOnPlatform = true;
+    onAnyPlatforms = true;
+  } else if (!onAnyPlatforms) {
+    onAnyPlatforms = false;
+    player.isOnPlatform = false;
+    if (!player.isJumping) {
+      entityMove(player, "down");
+    }
+  }
 }
 
 addEventListener("keydown", setKeysPressedNow);
@@ -133,6 +142,4 @@ addEventListener("keyup", unsetReleasedKeys);
 
 setInterval(() => {
   playerGravity(player);
-}, 5);
-
-console.log(getComputedStyle(platforms[0]).bottom);
+}, 1);
