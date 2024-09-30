@@ -9,8 +9,8 @@ const amountOfPlatforms = 8;
 const gameVelocity = 1;
 let nonElementPlatforms = [];
 const keysPressedNow = {};
-let platforms = document.getElementsByClassName("platform");
-
+let platforms = document.getElementsByClassName("platform-floor");
+//let platformsLeftRight;
 // generatePlatforms();
 
 // function platformed() {
@@ -32,29 +32,32 @@ function randomInteger(min, max) {
 
 // work
 function generatePlatforms() {
-  const width = {
-    min: 100,
-    max: 200,
+  const widthValue = {
+    min: 10,
+    max: 79,
   };
   const platformHeight = 30;
-  while (platforms.length < amountOfPlatforms) {
-    const platformStyle = `
-    width:${randomInteger(
-      width.min,
-      width.max
-    )}px;height:${platformHeight}px;bottom:${randomInteger(
-      20,
-      100
-    )}vh;left:${randomInteger(0, 100)}%;
+  while (platforms.length < 6) {
+    let width = randomInteger(widthValue.min, widthValue.max);
+    const platformStyleLeft = `
+    width:${width}%;height:${platformHeight}px;bottom:${(platforms.length+1) * 130
+      }px;left:0;
+    `;
+    const platformStyleRight = `
+    width:${90 - width}%;height:${platformHeight}px;bottom:${(platforms.length+1) * 130
+      }px;right:0;
     `;
 
     document.getElementById(
       "screen-container"
-    ).innerHTML += `<div class="platform" style=${platformStyle}></div>`;
-    platforms = document.getElementsByClassName("platform");
+    ).innerHTML += `<div class="platform-floor">
+    <div class="platform" style=${platformStyleLeft}></div>
+    <div class="platform" style=${platformStyleRight}></div>
+    </div>`;
+    platforms = document.getElementsByClassName("platform-floor");
   }
+  platforms = document.getElementsByClassName("platform");
 }
-
 function entityMove(entity, direction, amount = 0) {
   // Element OR Object --> X
   // Moves an entity by gameVelocity to the specified direction
