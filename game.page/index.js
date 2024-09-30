@@ -1,6 +1,7 @@
 const player = {
   element: document.getElementById("player"),
   isJumping: false,
+  jumpsCount: 0,
   isOnPlatform: false,
 };
 
@@ -13,7 +14,7 @@ function getEntityElement(entity) {
   return entityEl;
 }
 
-function entityMove(entity, direction) {
+function entityMove(entity, direction, amount = 0) {
   // Element OR Object --> X
   // Moves an entity by gameVelocity to the specified direction
   let entityEl = getEntityElement(entity);
@@ -29,16 +30,21 @@ function entityMove(entity, direction) {
 
   switch (direction) {
     case "up":
-      entityEl.style.bottom = `${currentBottomValue + gameVelocity}px`;
+    case "ArrowUp":
+    case "Space":
+      entityEl.style.bottom = `${currentBottomValue + gameVelocity + amount}px`;
       break;
     case "down":
-      entityEl.style.bottom = `${currentBottomValue - gameVelocity}px`;
+    case "ArrowDown":
+      entityEl.style.bottom = `${currentBottomValue - gameVelocity - amount}px`;
       break;
     case "left":
-      entityEl.style.left = `${currentLeftValue - gameVelocity}px`;
+    case "ArrowLeft":
+      entityEl.style.left = `${currentLeftValue - gameVelocity - amount}px`;
       break;
     case "right":
-      entityEl.style.left = `${currentLeftValue + gameVelocity}px`;
+    case "ArrowRight":
+      entityEl.style.left = `${currentLeftValue + gameVelocity + amount}px`;
       break;
   }
 }
@@ -46,48 +52,25 @@ function entityMove(entity, direction) {
 function setKeysPressedNow(e) {
   console.log("press");
   // set
-  switch (e.code) {
-    case "ArrowRight":
-      keysPressedNow["right"] = true;
-      break;
-    case "ArrowLeft":
-      keysPressedNow["left"] = true;
-      break;
-    case "ArrowUp":
-      console.log("up");
-      player.isJumping = true;
-      keysPressedNow["up"] = true;
-      break;
-    case "ArrowDown":
-      keysPressedNow["down"] = true;
-      break;
+  keysPressedNow[e.code] = true;
+  // Check if jumping
+  if (e.code === "Space" || e.code === "ArrowUp") {
+    jump(player);
+    player.isJumping = true;
   }
 
   // move player
   for (let property in keysPressedNow) {
     if (keysPressedNow[property]) {
-      entityMove(player, property);
+      entityMove(player, property, gameVelocity);
     }
   }
 }
 
 function unsetReleasedKeys(e) {
   // unset
-  switch (e.code) {
-    case "ArrowRight":
-      keysPressedNow["right"] = false;
-      break;
-    case "ArrowLeft":
-      keysPressedNow["left"] = false;
-      break;
-    case "ArrowUp":
-      player.isJumping = false;
-      keysPressedNow["up"] = false;
-      break;
-    case "ArrowDown":
-      keysPressedNow["down"] = false;
-      break;
-  }
+  keysPressedNow[e.code] = false;
+  if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
 function getStrippedNumberFromString(string) {
@@ -121,13 +104,14 @@ function playerGravity(player) {
       platformLeftValue <= currentLeftValue &&
       currentLeftValue <= platformLeftValue + platformWidthValue;
 
-      if (isOnPlatformTopHeight && isOnPlatformWidth) break;
+    if (isOnPlatformTopHeight && isOnPlatformWidth) break;
   }
 
   // Collision
   if (isOnPlatformTopHeight && isOnPlatformWidth) {
     player.isOnPlatform = true;
     onAnyPlatforms = true;
+    resetJump();
   } else if (!onAnyPlatforms) {
     onAnyPlatforms = false;
     player.isOnPlatform = false;
@@ -135,6 +119,20 @@ function playerGravity(player) {
       entityMove(player, "down");
     }
   }
+}
+
+function jump() {
+  if (!(player.jumpsCount > 5)) {
+    player.isJumping = true;
+    entityMove(player, "up", 30);
+  }
+
+  player.jumpsCount++;
+}
+
+function resetJump() {
+  player.isJumping = false;
+  player.jumpsCount = 0;
 }
 
 addEventListener("keydown", setKeysPressedNow);
