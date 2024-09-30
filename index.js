@@ -76,6 +76,7 @@ function unsetReleasedKeys(e) {
       keysPressedNow["down"] = false;
       break;
   }
+
 setInterval(function () {
     let j = platforms.length;
     let platY;
@@ -98,13 +99,13 @@ setInterval(function () {
     if (placeY !== stop) {
         entityFall(player)
     }
-    else {
-        return;
-    }
+    // else {
+    //     return;
+    // }
     console.log(Number(getComputedStyle(player).bottom.replace(/px/, "")));
     console.log("stop", stop);
 
-}, 5)}
+}, 50)}
 
 function entityFall(entity) {
     let currentBottomValue = entity.style.bottom ? Number(entity.style.bottom.replace(/px/, ""))
