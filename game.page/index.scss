@@ -16,22 +16,18 @@
   background-color: lightblue;
   border: black solid;
 }
- 
+
 #player {
   position: absolute;
   width: 50px;
   height: 50px;
   border: black solid;
-  // bottom: 300px + 50px;
-  // left: 300px;
-  
 }
 
 .platform {
-    position: absolute;
-    height: 50px;
-    border: black solid;
-    
+  position: absolute;
+  height: 50px;
+  border: black solid;
 }
 
 .full-platform {
@@ -39,7 +35,7 @@
   width: 90%;
 }
 
-#p{
+#p {
   bottom: 200px;
   width: 100px;
   // left: 250px;

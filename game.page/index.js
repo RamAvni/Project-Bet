@@ -1,5 +1,6 @@
 const player = {
   element: document.getElementById("player"),
+  startingPosition: {bottom: '150px', left: '200px'},
   isJumping: false,
   jumpsCount: 0,
   isOnPlatform: false,
@@ -7,59 +8,80 @@ const player = {
 
 const amountOfPlatforms = 8;
 const gameVelocity = 1;
-let nonElementPlatforms = []
+let nonElementPlatforms = [];
 const keysPressedNow = {};
-let platforms = document.getElementsByClassName("platform")
+let platforms = document.getElementsByClassName("platform");
 
-generatePlatforms()
+// generatePlatforms();
 
+setPlayer()
+
+function setPlayer(){
+  document.getElementById("player").style.bottom = player.startingPosition.bottom
+  document.getElementById("player").style.left = player.startingPosition.left
+}
 
 function getEntityElement(entity) {
   const entityEl = typeof entity === "object" ? entity.element : entity;
   return entityEl;
 }
 
-function randomInteger(min, max){
-  return Math.floor(Math.random() * (max-min)) + min
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
+// work
 function generatePlatforms() {
   const width = {
     min: 100,
-    max: 200
-  }
+    max: 200,
+  };
   const platformHeight = 30;
-  while(platforms.length < amountOfPlatforms){
+  while (platforms.length < amountOfPlatforms) {
     const platformStyle = `
-    width:${randomInteger(width.min, width.max)}px;height:${platformHeight}px;bottom:${randomInteger(0, 100)}%;left:${randomInteger(0, 100)}%;
+    width:${randomInteger(
+      width.min,
+      width.max
+    )}px;height:${platformHeight}px;bottom:${randomInteger(
+      0,
+      100
+    )}%;left:${randomInteger(0, 100)}%;
     `;
-    document.getElementById("screen-container").innerHTML += (`<div class="platform" style=${platformStyle}></div>`);
-    platforms = document.getElementsByClassName("platform")
+
+    document.getElementById(
+      "screen-container"
+    ).innerHTML += `<div class="platform" style=${platformStyle}></div>`;
+    platforms = document.getElementsByClassName("platform");
   }
 }
-
 
 function entityMove(entity, direction, amount = 0) {
   // Element OR Object --> X
   // Moves an entity by gameVelocity to the specified direction
   let entityEl = getEntityElement(entity);
-  let currentBottomValue = Number(
-    getComputedStyle(entityEl).bottom.replace(/px/, "")
+  console.log(
+    "eeeee" + getStrippedNumberFromString(getComputedStyle(entityEl).bottom)
   );
-  
+  let currentBottomValue = getStrippedNumberFromString(
+    getComputedStyle(entityEl).bottom
+  );
+  console.log("currentBottomValue: ", currentBottomValue);
+
   let currentLeftValue = Number(
     getComputedStyle(entityEl).left.replace(/px/, "")
   );
-  
+
   switch (direction) {
     case "up":
-      case "ArrowUp":
-        case "Space":
-          entityEl.style.bottom = `${currentBottomValue + gameVelocity + amount}px`;
-          break;
-          case "down":
-            case "ArrowDown":
+    case "ArrowUp":
+    case "Space":
+      entityEl.style.bottom = `${currentBottomValue + gameVelocity + amount}px`;
+      break;
+    case "down":
+    case "ArrowDown":
+      console.log("bottom before: ", entityEl.style.bottom);
       entityEl.style.bottom = `${currentBottomValue - gameVelocity - amount}px`;
+      console.log("bottom after: ", entityEl.style.bottom);
       break;
     case "left":
     case "ArrowLeft":
@@ -73,7 +95,7 @@ function entityMove(entity, direction, amount = 0) {
 }
 
 function setKeysPressedNow(e) {
-  console.log("press");
+  // console.log("press");
   // set
   keysPressedNow[e.code] = true;
 
@@ -100,14 +122,17 @@ function getStrippedNumberFromString(string) {
 }
 
 function playerGravity(player) {
+  console.log("player: ", player.element.style);
+
   const playerStyle = getComputedStyle(player.element);
+  console.log("first player style: ", playerStyle);
   const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
   const currentLeftValue = getStrippedNumberFromString(playerStyle.left);
   let onAnyPlatforms = false;
-  
+
   let isOnPlatformTopHeight;
   let isOnPlatformWidth;
-  
+
   for (let platform of platforms) {
     const platformStyle = getComputedStyle(platform);
     const platformBottomValue = getStrippedNumberFromString(
@@ -120,15 +145,16 @@ function playerGravity(player) {
     const platformWidthValue = getStrippedNumberFromString(platformStyle.width);
 
     isOnPlatformTopHeight =
-    currentBottomValue === platformBottomValue + platformHeightValue;
-    
+      currentBottomValue === platformBottomValue + platformHeightValue;
+    // console.log("currentBottomValue: ", currentBottomValue);
+
     isOnPlatformWidth =
-    platformLeftValue <= currentLeftValue &&
-    currentLeftValue <= platformLeftValue + platformWidthValue;
-    
+      platformLeftValue <= currentLeftValue &&
+      currentLeftValue <= platformLeftValue + platformWidthValue;
+
     if (isOnPlatformTopHeight && isOnPlatformWidth) break;
   }
-  
+
   // Collision
   if (isOnPlatformTopHeight && isOnPlatformWidth) {
     player.isOnPlatform = true;
@@ -161,5 +187,11 @@ addEventListener("keydown", setKeysPressedNow);
 addEventListener("keyup", unsetReleasedKeys);
 
 setInterval(() => {
+  generatePlatforms();
+}, 0);
+
+setInterval(() => {
   playerGravity(player);
-}, 1);
+}, 500);
+
+// put in comment the generatePlatforms function and put it instead in setIntervale with 0
