@@ -8,6 +8,10 @@ header {
   color: rgb(85, 83, 83);
 }
 
+body {
+  background-color: rgb(247, 236, 191);
+}
+
 img {
   width: 300px;
 }/*# sourceMappingURL=home.css.map */

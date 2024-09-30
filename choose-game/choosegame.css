@@ -1,1 +1,14 @@
-/*# sourceMappingURL=choosegame.css.map */
+#container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-content: space-around;
+}
+
+.image {
+  width: 350px;
+  height: 350px;
+  margin-top: 60px;
+  border: 5px, brown, solid;
+  border-radius: 20%;
+}/*# sourceMappingURL=choosegame.css.map */

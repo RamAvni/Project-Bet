@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"choosegame.css"}
+{"version":3,"sources":["choosegame.scss","choosegame.css"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,6BAAA;ACCJ;;ADEA;EACI,YAAA;EACA,aAAA;EACA,gBAAA;EACA,yBAAA;EACA,kBAAA;ACCJ","file":"choosegame.css"}
