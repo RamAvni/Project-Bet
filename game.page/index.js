@@ -17,7 +17,7 @@ function entityMove(entity, direction) {
   // Element OR Object --> X
   // Moves an entity by gameVelocity to the specified direction
   let entityEl = getEntityElement(entity);
-  const rect = entity.getBoundingClientRect();
+  const rect = entityEl.getBoundingClientRect();
 
   let currentBottomValue = Number(
     getComputedStyle(entityEl).bottom.replace(/px/, "")
@@ -29,7 +29,7 @@ function entityMove(entity, direction) {
 
   switch (direction) {
     case "up":
-      entityEl.position.x = `${currentBottomValue + gameVelocity}px`;
+      entityEl.style.bottom = `${currentBottomValue + gameVelocity}px`;
       break;
     case "down":
       entityEl.style.bottom = `${currentBottomValue - gameVelocity}px`;
