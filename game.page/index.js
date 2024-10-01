@@ -12,16 +12,6 @@ const gameVelocity = 5;
 let nonElementPlatforms = [];
 const keysPressedNow = {};
 let platforms = document.getElementsByClassName("platform-floor");
-//let platformsLeftRight;
-// generatePlatforms();
-
-// function platformed() {
-//   for (let i=0; i<15; i++){
-//     platforms[i].style.bottom = `${i*100}px`;
-//     console.log(platforms[i].width)
-//   }
-// }
-// platformed();
 
 function getEntityElement(entity) {
   const entityEl = typeof entity === "object" ? entity.element : entity;
@@ -189,6 +179,13 @@ function resetJump() {
   player.jumpsCount = 0;
 }
 
+function win(){
+  const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
+  const winPlatform = getStrippedNumberFromString(playerStyle.bottom)
+  if (currentBottomValue === temporary){
+    console.log("winner");
+  }
+}
 function updateSprite() {
   if (player.isJumping) {
     document.querySelector("#player img").src = "../images/mario-jump.png";
