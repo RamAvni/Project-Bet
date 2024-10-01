@@ -29,11 +29,17 @@
   background-color: black;
 }
 
+#player img {
+  width: 100%;
+  height: 100%;
+}
+
 .platform {
   position: absolute;
   height: 50px;
-  border: #000000 solid;
+  border: rgb(215, 179, 148) solid;
   width: 500px;
+  background-color: burlywood;
 }
 
 .full-platform {
