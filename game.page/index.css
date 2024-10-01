@@ -4,6 +4,14 @@
   padding: 0;
 }
 
+#score {
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  z-index: 100;
+  color: rgb(179, 135, 54);
+}
+
 #screen-container {
   display: flex;
   position: relative;

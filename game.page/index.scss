@@ -4,6 +4,14 @@
   padding: 0;
 }
 
+#score {
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  z-index: 100;
+  color: rgb(179, 135, 54);
+}
+
 // body {
 //   width: 100vw;
 //   height: 100vw;
@@ -22,11 +30,9 @@
   position: absolute;
   width: 50px;
   height: 50px;
-  border: 3px black solid;
   bottom: 700px;
   left: 150px;
   z-index: 2;
-  background-color: black;
 }
 
 #player img {

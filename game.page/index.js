@@ -6,8 +6,9 @@ const player = {
   isOnPlatform: false,
 };
 
+let score = 8000
 const amountOfPlatforms = 8;
-const gameVelocity = 1;
+const gameVelocity = 5;
 let nonElementPlatforms = [];
 const keysPressedNow = {};
 let platforms = document.getElementsByClassName("platform-floor");
@@ -107,7 +108,7 @@ function setKeysPressedNow(e) {
       break;
     } else if (keysPressedNow[property]) {
       entityMove(player, property, gameVelocity);
-      player.isRunning = true
+      player.isRunning = true;
     }
   }
 }
@@ -115,8 +116,13 @@ function setKeysPressedNow(e) {
 function unsetReleasedKeys(e) {
   // unset
   keysPressedNow[e.code] = false;
-  const areSideArrowsOff = keysPressedNow["left"] && keysPressedNow["ArrowLeft"] && keysPressedNow["right"] && keysPressedNow["ArrowRight"]
-  console.log(areSideArrowsOff)
+  const areSideArrowsOn =
+    (keysPressedNow["left"] || keysPressedNow["left"] === undefined) &&
+    (keysPressedNow["ArrowLeft"] || keysPressedNow["ArrowLeft"] === undefined) &&
+    (keysPressedNow["right"] || keysPressedNow["right"] === undefined) &&
+    (keysPressedNow["ArrowRight"] || keysPressedNow["ArrowRight"] === undefined);
+  console.log("areSideArrowsOn: ", areSideArrowsOn);
+  if (!areSideArrowsOn) player.isRunning = false;
   if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
@@ -193,6 +199,11 @@ function updateSprite() {
   }
 }
 
+function manageScore(){
+  --score
+  document.getElementById("score").innerHTML = `Score: ${score}`
+}
+
 addEventListener("keydown", setKeysPressedNow);
 addEventListener("keyup", unsetReleasedKeys);
 
@@ -201,6 +212,8 @@ generatePlatforms();
 setInterval(() => {
   playerGravity(player);
   updateSprite();
+  manageScore();
+
 }, 5);
 
 // put in comment the generatePlatforms function and put it instead in setIntervale with 0
