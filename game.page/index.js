@@ -10,16 +10,6 @@ const gameVelocity = 1;
 let nonElementPlatforms = [];
 const keysPressedNow = {};
 let platforms = document.getElementsByClassName("platform-floor");
-//let platformsLeftRight;
-// generatePlatforms();
-
-// function platformed() {
-//   for (let i=0; i<15; i++){
-//     platforms[i].style.bottom = `${i*100}px`;
-//     console.log(platforms[i].width)
-//   }
-// }
-// platformed();
 
 function getEntityElement(entity) {
   const entityEl = typeof entity === "object" ? entity.element : entity;
@@ -176,6 +166,13 @@ function jump() {
 function resetJump() {
   player.isJumping = false;
   player.jumpsCount = 0;
+}
+
+function win(){
+  const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
+  if (currentBottomValue === 0){
+    console.log("winner");
+  }
 }
 
 addEventListener("keydown", setKeysPressedNow);
