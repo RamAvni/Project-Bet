@@ -12,7 +12,9 @@ const gameVelocity = 5;
 let nonElementPlatforms = [];
 const keysPressedNow = {};
 let platforms = document.getElementsByClassName("platform-floor");
-
+const winPlatform = document.getElementById("winning-platform")
+const winSign = document.getElementById("announce-win")
+let score = 4000
 function getEntityElement(entity) {
   const entityEl = typeof entity === "object" ? entity.element : entity;
   return entityEl;
@@ -88,7 +90,10 @@ function entityMove(entity, direction, amount = 0) {
 function setKeysPressedNow(e) {
   // console.log("press");
   // set
-  keysPressedNow[e.code] = true;
+  if (e.code !== "ArrowDown"){ // Cancel arrow down
+    keysPressedNow[e.code] = true;
+  }
+  
 
   // move player
   for (let property in keysPressedNow) {
@@ -106,8 +111,13 @@ function setKeysPressedNow(e) {
 function unsetReleasedKeys(e) {
   // unset
   keysPressedNow[e.code] = false;
-  const areSideArrowsOff = keysPressedNow["left"] && keysPressedNow["ArrowLeft"] && keysPressedNow["right"] && keysPressedNow["ArrowRight"]
-  console.log(areSideArrowsOff)
+  const areSideArrowsOn = 
+  (keysPressedNow["left"] && keysPressedNow["left"] !== undefined) &&
+  (keysPressedNow["ArrowLeft"] && keysPressedNow["ArrowLeft"] !== undefined) &&
+  (keysPressedNow["right"] && keysPressedNow["right"] !== undefined) &&
+  (keysPressedNow["ArrowRight"] && keysPressedNow["ArrowRight"] !== undefined)
+
+  console.log(!areSideArrowsOn)
   if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
@@ -183,10 +193,11 @@ function win(){
   const winHeight = getStrippedNumberFromString(winStyle.height)
   const winTop = winBottom + winHeight
   let winSignStyle = getComputedStyle(winSign);
-  if (currentBottomValue === winTop+100 && currentLeftValue >1665){
+
+  if (currentBottomValue === winTop + 50 && currentLeftValue >1665){
+    
     document.getElementById("announce-win").style.display = 'block';
     player.hasWon = true;
-
   }
 }
 function updateSprite() {
@@ -200,7 +211,10 @@ function updateSprite() {
 }
 
 function manageScore(){
-  --score
+  if (!player.hasWon && score !== 0) --score
+  if (score === 0) {
+    document.getElementById("announce-loss").style.display = 'block';
+  }
   document.getElementById("score").innerHTML = `Score: ${score}`
 }
 

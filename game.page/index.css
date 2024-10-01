@@ -27,11 +27,9 @@
   position: absolute;
   width: 50px;
   height: 50px;
-  border: 3px black solid;
   bottom: 700px;
   left: 150px;
   z-index: 2;
-  background-color: black;
 }
 
 #player img {
@@ -66,6 +64,17 @@
 #announce-win {
   position: absolute;
   background-color: rgb(35, 203, 35);
+  z-index: 3;
+  width: 60%;
+  height: 15%;
+  text-align: center;
+  border: 5px, solid, black;
+  display: none;
+}
+
+#announce-loss {
+  position: absolute;
+  background-color: rgb(230, 6, 6);
   z-index: 3;
   width: 60%;
   height: 15%;

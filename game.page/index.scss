@@ -57,21 +57,33 @@
 }
 
 #winning-platform {
-  position:absolute;
+  position: absolute;
   bottom: 20px;
   width: 8%;
   left: 1665px;
   background-color: red;
   z-index: 2;
-  height:30px;
+  height: 30px;
 }
 
-#announce-win{
+#announce-win {
   position: absolute;
   background-color: rgb(35, 203, 35);
   z-index: 3;
-  width:60%;
-  height:15%;
+  width: 60%;
+  height: 15%;
+  text-align: center;
+  // border-radius: 12%;
+  border: 5px, solid, black;
+  display: none;
+}
+
+#announce-loss {
+  position: absolute;
+  background-color: rgb(230, 6, 6);
+  z-index: 3;
+  width: 60%;
+  height: 15%;
   text-align: center;
   // border-radius: 12%;
   border: 5px, solid, black;
