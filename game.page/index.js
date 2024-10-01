@@ -1,12 +1,12 @@
 const player = {
   element: document.getElementById("player"),
+  hasWon: false,
   isRunning: false,
   isJumping: false,
   jumpsCount: 0,
   isOnPlatform: false,
 };
 
-let score = 8000
 const amountOfPlatforms = 8;
 const gameVelocity = 5;
 let nonElementPlatforms = [];
@@ -62,7 +62,7 @@ function entityMove(entity, direction, amount = 0) {
   let currentLeftValue = Number(
     getComputedStyle(entityEl).left.replace(/px/, "")
   );
-  console.log("moving");
+  // console.log("moving");
 
   switch (direction) {
     case "up":
@@ -86,7 +86,7 @@ function entityMove(entity, direction, amount = 0) {
 }
 
 function setKeysPressedNow(e) {
-  console.log("press");
+  // console.log("press");
   // set
   keysPressedNow[e.code] = true;
 
@@ -106,13 +106,8 @@ function setKeysPressedNow(e) {
 function unsetReleasedKeys(e) {
   // unset
   keysPressedNow[e.code] = false;
-  const areSideArrowsOn =
-    (keysPressedNow["left"] || keysPressedNow["left"] === undefined) &&
-    (keysPressedNow["ArrowLeft"] || keysPressedNow["ArrowLeft"] === undefined) &&
-    (keysPressedNow["right"] || keysPressedNow["right"] === undefined) &&
-    (keysPressedNow["ArrowRight"] || keysPressedNow["ArrowRight"] === undefined);
-  console.log("areSideArrowsOn: ", areSideArrowsOn);
-  if (!areSideArrowsOn) player.isRunning = false;
+  const areSideArrowsOff = keysPressedNow["left"] && keysPressedNow["ArrowLeft"] && keysPressedNow["right"] && keysPressedNow["ArrowRight"]
+  console.log(areSideArrowsOff)
   if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
@@ -180,10 +175,18 @@ function resetJump() {
 }
 
 function win(){
+  const playerStyle = getComputedStyle(player.element);
   const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
-  const winPlatform = getStrippedNumberFromString(playerStyle.bottom)
-  if (currentBottomValue === temporary){
-    console.log("winner");
+  const currentLeftValue = getStrippedNumberFromString(playerStyle.left);
+  const winStyle = getComputedStyle(winPlatform);
+  const winBottom = getStrippedNumberFromString(winStyle.bottom);
+  const winHeight = getStrippedNumberFromString(winStyle.height)
+  const winTop = winBottom + winHeight
+  let winSignStyle = getComputedStyle(winSign);
+  if (currentBottomValue === winTop+100 && currentLeftValue >1665){
+    document.getElementById("announce-win").style.display = 'block';
+    player.hasWon = true;
+
   }
 }
 function updateSprite() {
@@ -209,8 +212,10 @@ generatePlatforms();
 setInterval(() => {
   playerGravity(player);
   updateSprite();
+  win();
   manageScore();
 
 }, 5);
+
 
 // put in comment the generatePlatforms function and put it instead in setIntervale with 0
