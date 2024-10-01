@@ -117,7 +117,7 @@ function unsetReleasedKeys(e) {
   (keysPressedNow["right"] && keysPressedNow["right"] !== undefined) &&
   (keysPressedNow["ArrowRight"] && keysPressedNow["ArrowRight"] !== undefined)
 
-  console.log(!areSideArrowsOn)
+  if(!areSideArrowsOn) player.isRunning = false
   if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
