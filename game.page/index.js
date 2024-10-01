@@ -1,5 +1,6 @@
 const player = {
   element: document.getElementById("player"),
+  isRunning: false,
   isJumping: false,
   jumpsCount: 0,
   isOnPlatform: false,
@@ -30,12 +31,14 @@ function generatePlatforms() {
   while (platforms.length < 6) {
     let width = randomInteger(widthValue.min, widthValue.max);
     const platformStyleLeft = `
-    width:${width}%;height:${platformHeight}px;bottom:${(platforms.length+1) * 130
-      }px;left:0;
+    width:${width}%;height:${platformHeight}px;bottom:${
+      (platforms.length + 1) * 130
+    }px;left:0;
     `;
     const platformStyleRight = `
-    width:${90 - width}%;height:${platformHeight}px;bottom:${(platforms.length+1) * 130
-      }px;right:0;
+    width:${90 - width}%;height:${platformHeight}px;bottom:${
+      (platforms.length + 1) * 130
+    }px;right:0;
     `;
 
     document.getElementById(
@@ -94,6 +97,7 @@ function setKeysPressedNow(e) {
       break;
     } else if (keysPressedNow[property]) {
       entityMove(player, property, gameVelocity);
+      player.isRunning = true
     }
   }
 }
@@ -101,6 +105,8 @@ function setKeysPressedNow(e) {
 function unsetReleasedKeys(e) {
   // unset
   keysPressedNow[e.code] = false;
+  const areSideArrowsOff = keysPressedNow["left"] && keysPressedNow["ArrowLeft"] && keysPressedNow["right"] && keysPressedNow["ArrowRight"]
+  console.log(areSideArrowsOff)
   if (e.code === "Space" || e.code === "ArrowUp") resetJump();
 }
 
@@ -109,7 +115,6 @@ function getStrippedNumberFromString(string) {
 }
 
 function playerGravity(player) {
-
   const playerStyle = getComputedStyle(player.element);
   const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
   const currentLeftValue = getStrippedNumberFromString(playerStyle.left);
@@ -170,8 +175,18 @@ function resetJump() {
 
 function win(){
   const currentBottomValue = getStrippedNumberFromString(playerStyle.bottom);
-  if (currentBottomValue === 0){
+  const winPlatform = getStrippedNumberFromString(playerStyle.bottom)
+  if (currentBottomValue === temporary){
     console.log("winner");
+  }
+}
+function updateSprite() {
+  if (player.isJumping) {
+    document.querySelector("#player img").src = "../images/mario-jump.png";
+  } else if (player.isRunning) {
+    document.querySelector("#player img").src = "../images/mario-running.gif";
+  } else {
+    document.querySelector("#player img").src = "../images/mario.png";
   }
 }
 
@@ -182,6 +197,7 @@ generatePlatforms();
 
 setInterval(() => {
   playerGravity(player);
+  updateSprite();
 }, 5);
 
 // put in comment the generatePlatforms function and put it instead in setIntervale with 0
