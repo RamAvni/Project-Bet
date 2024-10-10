@@ -24,7 +24,7 @@ function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// work
+
 function generatePlatforms() {
   const widthValue = {
     min: 10,
